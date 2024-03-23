@@ -27,7 +27,6 @@ export default function Nav() {
           type="button"
           onClick={() => setShowModal(true)}
           className="mr-2 text-xs font-bold  uppercase"
-          href="/dashboard"
         >
           Login
         </button>
