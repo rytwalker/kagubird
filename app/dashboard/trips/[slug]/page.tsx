@@ -21,11 +21,11 @@ export default function Trip() {
         <Map />
       </div>
       <h2 className="text-3xl mb-2 uppercase font-extrabold">Itinerary</h2>
-      {trip.itineraryItems.map((item) => (
+      {trip.itineraryItems.map((item: any) => (
         <ItineraryItem key={item.id} itineraryItem={item} />
       ))}
       <h2 className="text-3xl mb-2 uppercase font-extrabold">Stay</h2>
-      {trip.stays.map((stay) => (
+      {trip.stays.map((stay: any) => (
         <div key={stay.id} className="py-4 px-2 bg-gray-50 rounded-md">
           <h4 className="uppercase font-bold text-xs mb-1">
             Airbnb Hosted by Jake

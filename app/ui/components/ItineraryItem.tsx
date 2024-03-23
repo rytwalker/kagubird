@@ -1,7 +1,6 @@
 import { Disclosure, Transition } from "@headlessui/react";
 
-export default function IntineraryItem({ itineraryItem }) {
-  console.log(itineraryItem.locations);
+export default function IntineraryItem({ itineraryItem }: any) {
   return (
     <Disclosure as="div" className="mb-4 py-4 px-2 rounded-md bg-gray-50">
       <Disclosure.Button className="flex flex-col">
@@ -20,7 +19,7 @@ export default function IntineraryItem({ itineraryItem }) {
           <div className="my-4 h-px bg-gray-200" />
           <h4 className="uppercase font-bold text-xs mb-1">Locations</h4>
           <ul>
-            {itineraryItem.locations.map((location) => (
+            {itineraryItem.locations.map((location: any) => (
               <li key={location.name} className="uppercase text-xs mb-4">
                 <p>
                   {" "}
