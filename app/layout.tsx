@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
+import { Providers } from "./lib/Providers";
 import "./globals.css";
+import Nav from "./ui/components/Nav";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -14,8 +16,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout(props: React.PropsWithChildren) {
   return (
-    <html lang="en" className={montserrat.className}>
-      <body>{props.children}</body>
+    <html lang="en" className={montserrat.className} suppressHydrationWarning>
+      <body className="bg-white">
+        <Nav />
+        {props.children}
+      </body>
     </html>
   );
 }
