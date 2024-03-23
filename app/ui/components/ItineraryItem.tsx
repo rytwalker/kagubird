@@ -1,10 +1,11 @@
 import { Disclosure, Transition } from "@headlessui/react";
 
-export default function IntineraryItem() {
+export default function IntineraryItem({ itineraryItem }) {
+  console.log(itineraryItem.locations);
   return (
     <Disclosure as="div" className="mb-4 py-4 px-2 rounded-md bg-gray-50">
       <Disclosure.Button className="flex flex-col">
-        <h3 className="font-extrabold uppercase">Bar Crawl</h3>
+        <h3 className="font-extrabold uppercase">{itineraryItem.name}</h3>
         <p className="uppercase text-xs">Saturday April 20th 12pm</p>
       </Disclosure.Button>
       <Transition
@@ -19,24 +20,24 @@ export default function IntineraryItem() {
           <div className="my-4 h-px bg-gray-200" />
           <h4 className="uppercase font-bold text-xs mb-1">Locations</h4>
           <ul>
-            <li className="uppercase text-xs mb-4">
-              The BeerHIVE - 123 PEnn. AVE PITTSBURGH PA, 44121{" "}
-              <a className="text-kagu-green-500" href="https://google.com">
-                BEERHIVE.com
-              </a>{" "}
-              - 412-555-1224
-            </li>
-            <li className="uppercase text-xs mb-4">
-              The BeerHIVE - 123 PEnn. AVE PITTSBURGH PA, 44121{" "}
-              <a className="text-kagu-green-500" href="https://google.com">
-                BEERHIVE.com
-              </a>{" "}
-              - 412-555-1224
-            </li>
+            {itineraryItem.locations.map((location) => (
+              <li key={location.name} className="uppercase text-xs mb-4">
+                <p>
+                  {" "}
+                  {location.name} -{location.address}{" "}
+                </p>
+                <p>
+                  {" "}
+                  <a className="text-kagu-green-500" href="https://google.com">
+                    {location.name}.com
+                  </a>{" "}
+                  - {location.phone}
+                </p>
+              </li>
+            ))}
           </ul>
-
           <h4 className="uppercase font-bold text-xs mb-1">Notes</h4>
-          <p className="text-xs">Order isn't important. Bring cash.</p>
+          <p className="text-xs">{itineraryItem.notes}</p>
         </Disclosure.Panel>
       </Transition>
     </Disclosure>

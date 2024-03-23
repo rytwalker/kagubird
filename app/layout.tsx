@@ -3,7 +3,6 @@ import { Montserrat } from "next/font/google";
 import { Providers } from "./lib/Providers";
 import "./globals.css";
 import Nav from "./ui/components/Nav";
-import LoginModal from "./ui/components/LoginModal";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -18,10 +17,15 @@ export const metadata: Metadata = {
 export default function RootLayout(props: React.PropsWithChildren) {
   return (
     <html lang="en" className={montserrat.className} suppressHydrationWarning>
+      <head>
+        <link
+          href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css"
+          rel="stylesheet"
+        />
+      </head>
       <body className="bg-white">
         <Nav />
         {props.children}
-        <LoginModal />
       </body>
     </html>
   );
