@@ -1,6 +1,5 @@
 "use client";
 import IntineraryItem from "@/app/ui/components/ItineraryItem";
-import { Disclosure, Transition } from "@headlessui/react";
 
 export default function Trip() {
   return (
