@@ -7,7 +7,7 @@ export default function LoginModal({
   showModal = false,
   setShowModal,
   handleLogin,
-}) {
+}: any) {
   return (
     <Transition
       show={showModal}
