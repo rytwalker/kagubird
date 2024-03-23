@@ -71,7 +71,7 @@ const markers = [
 
 const tripLocation = { lat: 40.4313392, lng: -80.0629007 };
 
-const MapMarker = ({ marker }) => {
+const MapMarker = ({ marker }: any) => {
   const [infowindowOpen, setInfowindowOpen] = useState(false);
   const [markerRef, adMarker] = useAdvancedMarkerRef();
   return (
@@ -79,7 +79,6 @@ const MapMarker = ({ marker }) => {
       <AdvancedMarker
         ref={markerRef}
         position={{ lat: marker.lat, lng: marker.lng }}
-        clickable={true}
         onClick={() => setInfowindowOpen(true)}
         title={marker.name}
       >
@@ -88,7 +87,6 @@ const MapMarker = ({ marker }) => {
       {infowindowOpen ? (
         <InfoWindow
           anchor={adMarker}
-          maxwidth={200}
           onCloseClick={() => setInfowindowOpen(false)}
         >
           <div className="py-1">
