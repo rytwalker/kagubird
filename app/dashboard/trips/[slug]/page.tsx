@@ -22,7 +22,7 @@ export default function Trip() {
       </div>
       <h2 className="text-3xl mb-2 uppercase font-extrabold">Itinerary</h2>
       {trip.itineraryItems.map((item) => (
-        <ItineraryItem itineraryItem={item} />
+        <ItineraryItem key={item.id} itineraryItem={item} />
       ))}
       <h2 className="text-3xl mb-2 uppercase font-extrabold">Stay</h2>
       {trip.stays.map((stay) => (

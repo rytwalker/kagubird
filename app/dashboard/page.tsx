@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { trip } from "@/test-data";
 
 export default function Page() {
   return (
@@ -12,7 +13,7 @@ export default function Page() {
       <h2 className="font-bold uppercase mb-2 font-sm">Upcoming Trips</h2>
       <Link href="/dashboard/trips/1">
         <div className="bg-gray-50 rounded flex flex-col justify-center px-2 py-4">
-          <h3 className="font-extrabold uppercase">Ryan's Bday</h3>
+          <h3 className="font-extrabold uppercase">{trip.name}</h3>
           <p className="uppercase text-xs">April 19th - April 21st</p>
         </div>
       </Link>
