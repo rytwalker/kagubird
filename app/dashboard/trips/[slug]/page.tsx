@@ -26,7 +26,11 @@ export default function Trip() {
       ))}
       <h2 className="text-3xl mb-2 uppercase font-extrabold">Stay</h2>
       {trip.stays.map((stay: any) => (
-        <div key={stay.id} className="py-4 px-2 bg-gray-50 rounded-md">
+        <div
+          key={stay.id}
+          className="relative p-4 bg-gray-50 rounded-md overflow-hidden shadow-md shadow-gray-100"
+        >
+          <div className="absolute w-1.5 top-0 bottom-0 left-0 bg-gray-200" />
           <h4 className="uppercase font-bold text-xs mb-1">
             Airbnb Hosted by Jake
           </h4>
