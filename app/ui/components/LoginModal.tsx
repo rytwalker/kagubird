@@ -2,12 +2,9 @@
 
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import LoginForm from "./LoginForm";
 
-export default function LoginModal({
-  showModal = false,
-  setShowModal,
-  handleLogin,
-}: any) {
+export default function LoginModal({ showModal, closeModal }: any) {
   return (
     <Transition
       show={showModal}
@@ -19,7 +16,7 @@ export default function LoginModal({
       leaveTo="transform scale-95 opacity-0"
       as={Fragment}
     >
-      <Dialog className="relative z-50" onClose={() => setShowModal(false)}>
+      <Dialog className="relative z-50" onClose={closeModal}>
         <div className="fixed inset-0 bg-black/25 opacity-100" />
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4 text-center">
@@ -30,14 +27,7 @@ export default function LoginModal({
               <Dialog.Description className="mb-4">
                 Log in to your account
               </Dialog.Description>
-
-              <button
-                className="bg-kagu-green-500 text-white py-2 px-4 rounded-lg mr-4"
-                onClick={handleLogin}
-              >
-                Login
-              </button>
-              <button onClick={() => setShowModal(false)}>Cancel</button>
+              <LoginForm closeModal={closeModal} />
             </Dialog.Panel>
           </div>
         </div>

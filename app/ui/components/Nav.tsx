@@ -1,19 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Logo from "./Logo";
 import LoginModal from "./LoginModal";
 
 export default function Nav() {
-  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
-
-  function handleLogin() {
-    setShowModal(false);
-    router.push("/dashboard");
-  }
 
   return (
     <nav className=" px-2 h-14 bg-gray-50 flex items-center justify-between">
@@ -36,8 +29,7 @@ export default function Nav() {
       </div>
       <LoginModal
         showModal={showModal}
-        handleLogin={handleLogin}
-        setShowModal={setShowModal}
+        closeModal={() => setShowModal(false)}
       />
     </nav>
   );
