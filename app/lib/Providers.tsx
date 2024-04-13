@@ -1,11 +1,11 @@
 "use client";
 
-import { ThemeProvider } from "next-themes";
+import { APIProvider } from "@vis.gl/react-google-maps";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <APIProvider apiKey={process.env.NEXT_PUBLIC_MAP_API_KEY || ""}>
       {children}
-    </ThemeProvider>
+    </APIProvider>
   );
 }

@@ -11,6 +11,12 @@ const tailwindConfig = {
   ],
   theme: {
     extend: {
+      height: {
+        "full-w-header": "calc(100vh - var(--header-height))",
+      },
+      spacing: {
+        "mobile-nav-4": "calc(var(--mobile-nav-height) + 1rem)",
+      },
       colors: {
         black: "#111111",
         gray: {
