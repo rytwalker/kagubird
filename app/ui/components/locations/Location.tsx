@@ -12,7 +12,7 @@ const Location = ({ location }: { location: LocationType }) => {
         <a className="text-kagu-green-500 underline" href="https://google.com">
           website
         </a>{" "}
-        - {location.phone}
+        {location.phone ? <span> - {location.phone}</span> : null}
       </p>
     </li>
   );
