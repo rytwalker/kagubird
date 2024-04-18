@@ -1,9 +1,6 @@
 import BaseDatePicker from "react-datepicker";
 import { textInputStyles } from "./TextInput";
 import "react-datepicker/dist/react-datepicker.css";
-const data = [];
-data[0] = "foo";
-data[1] = "foo";
 
 const DatePicker = ({
   selected,
