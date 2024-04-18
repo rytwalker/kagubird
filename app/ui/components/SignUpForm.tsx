@@ -1,13 +1,31 @@
+"use client";
 import { useRouter } from "next/navigation";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import TextInput from "../core/TextInput";
+import { api } from "@/app/lib/api";
+import { useState } from "react";
 
-const SignUpForm = ({ closeModal }: any) => {
+const SignUpForm = () => {
+  const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleSubmit = () => {
-    closeModal();
+  const handleSubmit = async (values: any) => {
+    const payload = {
+      name: values.name,
+      email: values.email,
+      password: values.password,
+    };
+
+    const { error } = await api("/v1/users", {
+      body: JSON.stringify(payload),
+      method: "POST",
+    });
+    if (error) {
+      setError("Something went wrong. Please try again.");
+      return;
+    }
+
     router.push("/confirm-email");
   };
 
@@ -34,6 +52,11 @@ const SignUpForm = ({ closeModal }: any) => {
       onSubmit={handleSubmit}
     >
       <Form>
+        {error ? (
+          <p className="mb-8 py-2 px-4 bg-red-100 text-red-600 rounded-lg border border-red-300">
+            {error}
+          </p>
+        ) : null}
         <TextInput label="name" name="name" type="text" placeholder="name" />
         <TextInput label="email" name="email" type="text" placeholder="email" />
         <TextInput
@@ -52,10 +75,7 @@ const SignUpForm = ({ closeModal }: any) => {
           className="bg-kagu-green-500 text-white py-2 px-4 rounded-lg mr-4"
           type="submit"
         >
-          Login
-        </button>
-        <button type="button" onClick={closeModal}>
-          Cancel
+          Sign up
         </button>
       </Form>
     </Formik>

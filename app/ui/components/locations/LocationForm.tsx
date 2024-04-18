@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { Fragment } from "react";
 import { Form, Formik } from "formik";
 import { Combobox, Transition } from "@headlessui/react";
 import usePlacesAutocomplete, {
@@ -34,7 +34,7 @@ const handleSubmit = async (values: any) => {
   await refreshTrip();
 };
 
-const LocationForm = ({ activityId }: any) => {
+const LocationForm = ({ activityId, closeModal }: any) => {
   const {
     ready,
     value,
@@ -55,8 +55,13 @@ const LocationForm = ({ activityId }: any) => {
     activity: activityId,
   };
 
+  const onSubmit = async (values: any) => {
+    await handleSubmit(values);
+    closeModal();
+  };
+
   return (
-    <Formik onSubmit={handleSubmit} initialValues={initialValues}>
+    <Formik onSubmit={onSubmit} initialValues={initialValues}>
       {({ values, setFieldValue }) => {
         const handleSelect = async (address: string) => {
           console.log(address);

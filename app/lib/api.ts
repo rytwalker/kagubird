@@ -1,6 +1,8 @@
 type Options = {
   method?: string;
   body?: any;
+  next?: any;
+  headers?: any;
 };
 
 export const api = async (endpoint: string, options: Options) => {

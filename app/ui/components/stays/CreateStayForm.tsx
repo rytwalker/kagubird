@@ -6,6 +6,7 @@ import Button from "../../core/Button";
 import DatePicker from "../../core/DateInputs";
 import { api } from "@/app/lib/api";
 import { refreshTrip } from "@/app/lib/actions";
+import PlacesAutocomplete from "../../core/PlacesAutocomplete";
 
 const handleSubmit = async (values: any) => {
   const startTime =
@@ -20,13 +21,18 @@ const handleSubmit = async (values: any) => {
 
   const payload = {
     name: values.name,
-    notes: values.notes,
     start_time: startTime,
     end_time: endTime,
+    type: values.type,
+    link: values.link,
+    phone: values.phone,
+    address: values.address,
+    lat: values.lat,
+    lng: values.lng,
     trip: values.tripId,
   };
   console.log(payload);
-  const { data, error } = await api("/v1/activities", {
+  const { data, error } = await api("/v1/stays", {
     body: JSON.stringify(payload),
     method: "POST",
   });
@@ -34,7 +40,7 @@ const handleSubmit = async (values: any) => {
   await refreshTrip();
 };
 
-const CreateActivityForm = ({ tripId, closeModal }: any) => {
+const CreateStayForm = ({ tripId, closeModal }: any) => {
   const onSubmit = async (values: any) => {
     await handleSubmit(values);
     closeModal();
@@ -48,22 +54,52 @@ const CreateActivityForm = ({ tripId, closeModal }: any) => {
         startTime: "",
         endDate: "",
         endTime: "",
-        notes: "",
+        address: "",
+        lat: "",
+        lng: "",
+        link: "",
+        phone: "",
+        type: "",
         tripId,
       }}
       onSubmit={onSubmit}
     >
       {({ values, isSubmitting, setFieldValue }) => {
-        console.log(isSubmitting);
+        const handleSelect = async (location: any) => {
+          console.log(location);
+          setFieldValue("address", location.formatted_address);
+          setFieldValue("lat", location.lat);
+          setFieldValue("lng", location.lng);
+        };
+
+        const resetLocation = () => {
+          setFieldValue("address", "");
+          setFieldValue("lat", "");
+          setFieldValue("lng", "");
+        };
+
         return (
           <Form>
             <TextInput
-              label="What are we doing?"
+              label="Where are we staying?"
               type="text"
               name="name"
-              placeholder="Activity name"
+              placeholder="Stay name"
             />
             <div className="uppercase mb-1 font-semibold text-xs text-gray-400">
+              Address?
+            </div>
+            {values.address ? (
+              <div className="flex items-center">
+                <span>{values.address}</span>
+                <button onClick={resetLocation} type="button">
+                  x
+                </button>
+              </div>
+            ) : (
+              <PlacesAutocomplete handleSelect={handleSelect} />
+            )}
+            <div className="uppercase mt-8 mb-1 font-semibold text-xs text-gray-400">
               When does it start?
             </div>
             <div className="flex gap-4">
@@ -96,10 +132,22 @@ const CreateActivityForm = ({ tripId, closeModal }: any) => {
               />
             </div>
             <TextInput
-              label="Any notes?"
+              label="Link"
               type="text"
-              name="notes"
-              placeholder="Notes"
+              name="link"
+              placeholder="Link"
+            />
+            <TextInput
+              label="Phone number"
+              type="text"
+              name="phone"
+              placeholder="Phone"
+            />
+            <TextInput
+              label="What is it? (airbnb, hotel)"
+              type="text"
+              name="type"
+              placeholder="Type"
             />
             <Button
               disabled={isSubmitting}
@@ -107,7 +155,7 @@ const CreateActivityForm = ({ tripId, closeModal }: any) => {
               fullWidth
               intent="primary"
             >
-              {isSubmitting ? "Adding Activity..." : "Add Activity"}
+              {isSubmitting ? "Adding Stay..." : "Add Stay"}
             </Button>
           </Form>
         );
@@ -116,4 +164,4 @@ const CreateActivityForm = ({ tripId, closeModal }: any) => {
   );
 };
 
-export default CreateActivityForm;
+export default CreateStayForm;

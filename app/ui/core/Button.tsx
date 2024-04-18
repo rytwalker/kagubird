@@ -1,5 +1,8 @@
-import { PropsWithChildren } from "react";
+import { ComponentProps } from "react";
 import { cva, VariantProps } from "class-variance-authority";
+
+export type ButtonVariants = VariantProps<typeof buttonStyles>;
+export type ButtonProps = ComponentProps<"button"> & ButtonVariants;
 
 const buttonStyles = cva(
   "flex items-center justify-center rounded-lg font-medium drop-shadow-sm focus:outline-none",
@@ -19,11 +22,6 @@ const buttonStyles = cva(
   },
 );
 
-interface Props extends VariantProps<typeof buttonStyles> {
-  type: "button" | "submit";
-  onClick?: () => {} | void;
-}
-
 export default function Button({
   intent,
   fullWidth,
@@ -31,7 +29,7 @@ export default function Button({
   children,
   type = "button",
   ...props
-}: PropsWithChildren<Props>) {
+}: ButtonProps) {
   return (
     <button
       {...props}

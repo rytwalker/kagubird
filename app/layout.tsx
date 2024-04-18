@@ -4,6 +4,7 @@ import { Providers } from "./lib/Providers";
 import "./globals.css";
 import Nav from "./ui/components/Nav";
 import MobileNav from "./ui/components/MobileNav";
+import { getSession } from "./lib/auth";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -15,12 +16,12 @@ export const metadata: Metadata = {
   description: "Have fun with friends",
 };
 
-export default function RootLayout(props: React.PropsWithChildren) {
+export default async function RootLayout(props: React.PropsWithChildren) {
+  const session = await getSession();
   return (
     <html lang="en" className={montserrat.className} suppressHydrationWarning>
-      <head></head>
       <body className="bg-white">
-        <Nav />
+        <Nav session={session} />
         {props.children}
         <MobileNav />
         <script

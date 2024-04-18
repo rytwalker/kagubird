@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import {
   APIProvider,
   Map as MapComponent,
@@ -8,66 +8,6 @@ import {
   InfoWindow,
   useAdvancedMarkerRef,
 } from "@vis.gl/react-google-maps";
-
-const markers = [
-  {
-    name: "PNC Park",
-    lat: 40.4473553,
-    lng: -80.0081783,
-    address: "1234 1st Ave. Pittsburgh, PA 44444",
-    emoji: "🏟️",
-  },
-  {
-    name: "The Beerhive",
-    lat: 40.4520998,
-    lng: -79.9875882,
-    address: "1234 1st Ave. Pittsburgh, PA 44444",
-    emoji: "🍺",
-  },
-  {
-    name: "Remedy",
-    lat: 0.4789968,
-    lng: -79.9581093,
-    address: "1234 1st Ave. Pittsburgh, PA 44444",
-    emoji: "🥃",
-  },
-  {
-    name: "Spirit",
-    lat: 40.4786379,
-    lng: -79.959153,
-    address: "1234 1st Ave. Pittsburgh, PA 44444",
-    emoji: "🎵",
-  },
-  {
-    name: "Airbnb",
-    lat: 40.4668278,
-    lng: -80.0301521,
-    address: "1234 1st Ave. Pittsburgh, PA 44444",
-    isStay: true,
-    emoji: "🏠",
-  },
-  {
-    name: "Brillobox",
-    lat: 40.4656218,
-    lng: -79.9573464,
-    address: "1234 1st Ave. Pittsburgh, PA 44444",
-    emoji: "🍸",
-  },
-  {
-    name: "Rivers Casino",
-    lat: 40.4478179,
-    lng: -80.0257769,
-    address: "1234 1st Ave. Pittsburgh, PA 44444",
-    emoji: "🎰",
-  },
-  {
-    name: "tako",
-    lat: 40.4423048,
-    lng: -80.0047373,
-    address: "1234 1st Ave. Pittsburgh, PA 44444",
-    emoji: "🌮",
-  },
-];
 
 const tripLocation = { lat: 40.4313392, lng: -80.0629007 };
 
@@ -82,7 +22,23 @@ const MapMarker = ({ marker }: any) => {
         onClick={() => setInfowindowOpen(true)}
         title={marker.name}
       >
-        <div className="text-xl">{marker.emoji}</div>
+        {marker.emoji ? (
+          <div className="text-xl">{marker.emoji}</div>
+        ) : (
+          <div
+            className="border bg-kagu-green-500 border-kagu-green-700"
+            style={{
+              width: 16,
+              height: 16,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              border: "2px solid",
+              borderRadius: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          ></div>
+        )}
       </AdvancedMarker>
       {infowindowOpen ? (
         <InfoWindow
@@ -98,25 +54,38 @@ const MapMarker = ({ marker }: any) => {
     </>
   );
 };
+const getMarkers = (trip: any) => {
+  if (!trip.activities?.length) return [];
+  const stays = (trip.stays || []).reduce((acc: any, cur: any) => {
+    return [...acc, { ...cur, emoji: "🏠" }];
+  }, []);
 
-const Map = () => (
-  <APIProvider
-    apiKey={process.env.NEXT_PUBLIC_MAP_API_KEY || ""}
-    libraries={["marker"]}
-  >
-    <MapComponent
-      mapId="24b31ffef1dd7117"
-      className="w-full h-80 rounded-md"
-      defaultCenter={{ lat: tripLocation.lat, lng: tripLocation.lng }}
-      defaultZoom={12}
-      gestureHandling={"greedy"}
-      disableDefaultUI={true}
+  return trip.activities.reduce((acc: any, cur: any) => {
+    return [...acc, ...cur.locations];
+  }, stays);
+};
+
+const Map = ({ trip }: any) => {
+  const markers = getMarkers(trip);
+  return (
+    <APIProvider
+      apiKey={process.env.NEXT_PUBLIC_MAP_API_KEY || ""}
+      libraries={["marker"]}
     >
-      {markers.map((marker) => (
-        <MapMarker marker={marker} key={marker.name} />
-      ))}
-    </MapComponent>
-  </APIProvider>
-);
+      <MapComponent
+        mapId="24b31ffef1dd7117"
+        className="w-full h-80 rounded-md"
+        defaultCenter={{ lat: trip.lat, lng: trip.lng }}
+        defaultZoom={12}
+        gestureHandling={"greedy"}
+        disableDefaultUI={true}
+      >
+        {markers.map((marker: any) => (
+          <MapMarker marker={marker} key={marker.name} />
+        ))}
+      </MapComponent>
+    </APIProvider>
+  );
+};
 
 export default Map;

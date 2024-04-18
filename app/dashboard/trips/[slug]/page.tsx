@@ -1,10 +1,15 @@
+import { getSession } from "@/app/lib/auth";
 import Map from "@/app/ui/components/Map";
-import { trip } from "@/test-data";
 import Activities from "@/app/ui/components/activities/Activities";
+import Stays from "@/app/ui/components/stays/Stays";
+import TripGoers from "@/app/ui/components/tripgoers/TripGoers";
+import { format } from "date-fns";
+import { redirect } from "next/navigation";
 
-async function getData(slug: string) {
+async function getData(slug: string, token: string) {
   const res = await fetch(`http://localhost:4000/v1/trips/${slug}`, {
     next: { tags: ["trip"] },
+    headers: { Authorization: `Bearer ${token}` },
   });
   //   // You can return Date, Map, Set, etc.
   if (!res.ok) {
@@ -17,7 +22,23 @@ async function getData(slug: string) {
 }
 
 export default async function Trip({ params }: { params: { slug: string } }) {
-  const data = await getData(params.slug);
+  // 1. get session
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/login");
+  }
+  // 2. get trip (add to api some kind of thing)
+  const data = await getData(params.slug, session.user.token);
+  const trip = data.trip;
+  const allowEdits = trip.created_by === session.user.user_id;
+  const tripgoer =
+    allowEdits ||
+    trip.tripgoers.find(({ id }: any) => id === session.user.user_id);
+  if (!tripgoer) {
+    redirect("/dashboard");
+  }
+  console.log(trip);
 
   return (
     <>
@@ -28,41 +49,37 @@ export default async function Trip({ params }: { params: { slug: string } }) {
           </h1>
           <div className="flex justify-between">
             <p>
-              {trip.location.city}, {trip.location.state}
+              {trip.city}, {trip.state_code}
             </p>
-            <p className="text-sm">April 19th - April 21st</p>
+            <p className="text-sm">
+              {format(trip.start_date, "MMMM/dd/yy")} -{" "}
+              {format(trip.end_date, "MMMM/dd/yy")}
+            </p>
           </div>
         </div>
         <div className="h-80 bg-gray-100  rounded-md mb-6">
-          <Map />
+          <Map trip={trip} />
         </div>
         {/* Activities section */}
         <h2 className="text-3xl mb-2 uppercase font-extrabold">Itinerary</h2>
-        <Activities activities={data.trip.activities} />
+        <Activities
+          activities={data.trip.activities}
+          allowEdits={allowEdits}
+          tripId={trip.id}
+        />
 
         <h2 className="text-3xl mb-2 uppercase font-extrabold">Stay</h2>
-        {trip.stays.map((stay: any) => (
-          <div
-            key={stay.id}
-            className="relative p-4 bg-gray-50 rounded-md overflow-hidden shadow-md shadow-gray-100"
-          >
-            <div className="absolute w-1.5 top-0 bottom-0 left-0 bg-gray-200" />
-            <h4 className="uppercase font-bold text-xs mb-1">
-              Airbnb Hosted by Jake
-            </h4>
-            <p className="text-xs">Check in after 3pm Friday April 19th</p>
-            <p className="text-xs mb-4">Check out 12pm Sunday April 21st</p>
-            <ul>
-              <li className="uppercase text-xs">
-                1234 1st Ave. Pittsbugh, PA 44444
-              </li>
-              <li className="uppercase text-xs">412-123-4556</li>
-              <li className="text-kagu-green-500 text-xs mt-2">
-                <a href="https://google.com">Airbnb Link</a>
-              </li>
-            </ul>
-          </div>
-        ))}
+        <Stays
+          stays={trip.stays || []}
+          allowEdits={allowEdits}
+          tripId={trip.id}
+        />
+        <TripGoers
+          allowEdits={allowEdits}
+          tripId={trip.id}
+          token={session.user.token}
+          tripgoers={trip.tripgoers || []}
+        />
       </div>
     </>
   );

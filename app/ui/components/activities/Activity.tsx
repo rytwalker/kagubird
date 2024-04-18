@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { format } from "date-fns";
 
 import { Disclosure, Transition } from "@headlessui/react";
 import { MapPinIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
@@ -11,7 +12,7 @@ import LocationForm from "../locations/LocationForm";
 import { Location as LocationType } from "@/app/lib/definitions";
 import Location from "../locations/Location";
 
-export default function Activity({ activity }: any) {
+export default function Activity({ activity, allowEdits }: any) {
   const [showLocationModal, setShowLocationModal] = useState(false);
 
   let locationText;
@@ -22,6 +23,15 @@ export default function Activity({ activity }: any) {
   } else {
     locationText = activity.locations[0].address;
   }
+
+  const startDate =
+    format(activity.start_time, "iiii MMMM do") +
+    format(activity.start_time, " h:mmaaa");
+  const endDate =
+    format(activity.start_time, "iiii MMMM do") ===
+    format(activity.end_time, "iiii MMMM do")
+      ? format(activity.end_time, "h:mmaaa")
+      : format(activity.end_time, "iiii MMMM do h:mmaaa");
   return (
     <>
       <Modal
@@ -30,7 +40,10 @@ export default function Activity({ activity }: any) {
         showModal={showLocationModal}
         closeModal={() => setShowLocationModal(false)}
       >
-        <LocationForm activityId={activity.id} />
+        <LocationForm
+          activityId={activity.id}
+          closeModal={() => setShowLocationModal(false)}
+        />
       </Modal>
       <Disclosure
         as="div"
@@ -40,7 +53,9 @@ export default function Activity({ activity }: any) {
         <Disclosure.Button className="flex justify-between w-full">
           <div className="flex flex-col min-h-16 items-start">
             <h3 className="font-extrabold uppercase">{activity.name}</h3>
-            <p className="uppercase text-xs">Saturday April 20th 12pm</p>
+            <p className="uppercase text-xs text-left">
+              {startDate} - {endDate}
+            </p>
             <p className="uppercase text-xs flex items-center mt-auto text-kagu-green-500">
               <MapPinIcon className="h-4 w-4 mr-1" />
               {locationText}
@@ -64,16 +79,18 @@ export default function Activity({ activity }: any) {
                 <Location location={location} key={location.id} />
               ))}
             </ul>
-            <div className="mb-4">
-              <Button
-                intent="flat"
-                type="button"
-                size="sm"
-                onClick={() => setShowLocationModal(true)}
-              >
-                <PlusCircleIcon className="w-4 h-4 mr-1" /> Location
-              </Button>
-            </div>
+            {allowEdits ? (
+              <div className="mb-4">
+                <Button
+                  intent="flat"
+                  type="button"
+                  size="sm"
+                  onClick={() => setShowLocationModal(true)}
+                >
+                  <PlusCircleIcon className="w-4 h-4 mr-1" /> Location
+                </Button>
+              </div>
+            ) : null}
             <h4 className="uppercase font-bold text-xs mb-1">Notes</h4>
             <p className="text-xs">{activity.notes}</p>
           </Disclosure.Panel>
