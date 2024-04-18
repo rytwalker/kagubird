@@ -10,7 +10,7 @@ const TripGoers = ({ allowEdits, tripId, token, tripgoers }: any) => {
   const [showTripGoerModal, setShowTripGoerModal] = useState(false);
 
   return (
-    <>
+    <div>
       <Modal
         title="Add a friend!"
         showModal={showTripGoerModal}
@@ -24,7 +24,7 @@ const TripGoers = ({ allowEdits, tripId, token, tripgoers }: any) => {
       </Modal>
 
       {allowEdits ? (
-        <>
+        <div>
           <h3 className="uppercase font-bold text-md mb-2">Trip Goers</h3>
           <ul className="mb-4">
             {tripgoers.map((tripgoer: any) => (
@@ -40,9 +40,9 @@ const TripGoers = ({ allowEdits, tripId, token, tripgoers }: any) => {
               <PlusCircleIcon className="w-6 h-6 mr-1" /> Trip Goer
             </Button>
           </div>
-        </>
+        </div>
       ) : null}
-    </>
+    </div>
   );
 };
 

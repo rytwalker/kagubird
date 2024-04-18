@@ -9,8 +9,6 @@ import {
   useAdvancedMarkerRef,
 } from "@vis.gl/react-google-maps";
 
-const tripLocation = { lat: 40.4313392, lng: -80.0629007 };
-
 const MapMarker = ({ marker }: any) => {
   const [infowindowOpen, setInfowindowOpen] = useState(false);
   const [markerRef, adMarker] = useAdvancedMarkerRef();

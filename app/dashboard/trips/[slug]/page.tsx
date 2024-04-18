@@ -45,7 +45,7 @@ export default async function Trip({ params }: { params: { slug: string } }) {
 
   return (
     <>
-      <div className="p-4 pb-mobile-nav-4">
+      <div className="p-4 pb-mobile-nav-4 max-w-5xl mx-auto">
         <div className="mb-6">
           <h1 className="text-kagu-green-500 text-center text-5xl uppercase font-extrabold">
             {trip.name}
@@ -64,25 +64,32 @@ export default async function Trip({ params }: { params: { slug: string } }) {
           <Map trip={trip} />
         </div>
         {/* Activities section */}
-        <h2 className="text-3xl mb-2 uppercase font-extrabold">Itinerary</h2>
-        <Activities
-          activities={data.trip.activities}
-          allowEdits={allowEdits}
-          tripId={trip.id}
-        />
-
-        <h2 className="text-3xl mb-2 uppercase font-extrabold">Stay</h2>
-        <Stays
-          stays={trip.stays || []}
-          allowEdits={allowEdits}
-          tripId={trip.id}
-        />
-        <TripGoers
-          allowEdits={allowEdits}
-          tripId={trip.id}
-          token={session.user.token}
-          tripgoers={trip.tripgoers || []}
-        />
+        <div className="lg:flex lg:gap-8">
+          <div>
+            <h2 className="text-3xl mb-2 uppercase font-extrabold">
+              Itinerary
+            </h2>
+            <Activities
+              activities={data.trip.activities}
+              allowEdits={allowEdits}
+              tripId={trip.id}
+            />
+          </div>
+          <div>
+            <h2 className="text-3xl mb-2 uppercase font-extrabold">Stay</h2>
+            <Stays
+              stays={trip.stays || []}
+              allowEdits={allowEdits}
+              tripId={trip.id}
+            />
+          </div>
+          <TripGoers
+            allowEdits={allowEdits}
+            tripId={trip.id}
+            token={session.user.token}
+            tripgoers={trip.tripgoers || []}
+          />
+        </div>
       </div>
     </>
   );
