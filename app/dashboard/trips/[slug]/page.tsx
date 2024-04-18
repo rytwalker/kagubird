@@ -7,10 +7,13 @@ import { format } from "date-fns";
 import { redirect } from "next/navigation";
 
 async function getData(slug: string, token: string) {
-  const res = await fetch(`http://localhost:4000/v1/trips/${slug}`, {
-    next: { tags: ["trip"] },
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/v1/trips/${slug}`,
+    {
+      next: { tags: ["trip"] },
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
   //   // You can return Date, Map, Set, etc.
   if (!res.ok) {
     console.log(res.status);
